@@ -1,4 +1,5 @@
-import { MarkdownPostProcessor } from "obsidian";
+import { MarkdownPostProcessor, setIcon } from "obsidian";
+
 import { CalloutConfig } from "./settings";
 
 function getFirstTextNode(li: HTMLElement) {
@@ -68,7 +69,7 @@ export function buildPostProcessor(
     const config = getConfig();
 
     el.findAll("li").forEach((li) => {
-      let node = getFirstTextNode(li);
+      const node = getFirstTextNode(li);
 
       if (!node) return;
 
@@ -85,7 +86,13 @@ export function buildPostProcessor(
 
           node.replaceWith(
             createFragment((f) => {
-              f.append(createSpan({ cls: "lc-list-marker", text: text[0] }));
+              f.append(
+                createSpan({ cls: "lc-list-marker", text: text[0] }, (span) => {
+                  if (callout.icon) {
+                    setIcon(span, callout.icon);
+                  }
+                })
+              );
               f.append(text.slice(1));
             })
           );

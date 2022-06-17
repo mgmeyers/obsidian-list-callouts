@@ -1,15 +1,15 @@
-import { setIcon } from "obsidian";
-import { StateEffect, StateField } from "@codemirror/state";
 import {
   Decoration,
+  DecorationSet,
   EditorView,
   ViewPlugin,
   ViewUpdate,
-  DecorationSet,
   WidgetType,
 } from "@codemirror/view";
-import { RangeSetBuilder } from "@codemirror/rangeset";
+import { RangeSetBuilder, StateEffect, StateField } from "@codemirror/state";
+
 import { CalloutConfig } from "./settings";
+import { setIcon } from "obsidian";
 
 export const setConfig = StateEffect.define<CalloutConfig[]>();
 
@@ -83,11 +83,11 @@ export function buildCalloutDecos(view: EditorView) {
 
   const builder = new RangeSetBuilder<Decoration>();
 
-  for (let { from, to } of view.visibleRanges) {
+  for (const { from, to } of view.visibleRanges) {
     for (let pos = from; pos <= to; ) {
       const line = view.state.doc.lineAt(pos);
 
-      for (let callout of config) {
+      for (const callout of config) {
         const match = line.text.match(callout.re);
 
         if (match) {
