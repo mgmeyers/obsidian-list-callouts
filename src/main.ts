@@ -3,36 +3,42 @@ import { debounce, Events, MarkdownView, Plugin } from "obsidian";
 import escapeStringRegexp from "escape-string-regexp";
 import {
   CalloutConfig,
-  colorOrder,
   ListCalloutSettings,
   ListCalloutsSettings,
 } from "./settings";
 import { calloutExtension, calloutsConfigField, setConfig } from "./extension";
 import { buildPostProcessor } from "./postProcessor";
 
-const DEFAULT_SETTINGS: ListCalloutsSettings = {
-  "255, 214, 0": {
+const DEFAULT_SETTINGS: ListCalloutsSettings = [
+  {
+    color: "255, 214, 0",
     char: "&",
   },
-  "255, 145, 0": {
+  {
+    color: "255, 145, 0",
     char: "?",
   },
-  "255, 23, 68": {
+  {
+    color: "255, 23, 68",
     char: "!",
   },
-  "124, 77, 255": {
+  {
+    color: "124, 77, 255",
     char: "~",
   },
-  "0, 184, 212": {
+  {
+    color: "0, 184, 212",
     char: "@",
   },
-  "0, 200, 83": {
+  {
+    color: "0, 200, 83",
     char: "$",
   },
-  "158, 158, 158": {
+  {
+    color: "158, 158, 158",
     char: "%",
   },
-};
+];
 
 export default class ListCalloutsPlugin extends Plugin {
   settings: ListCalloutsSettings;
@@ -76,33 +82,31 @@ export default class ListCalloutsPlugin extends Plugin {
   }
 
   buildEditorConfig(): CalloutConfig[] {
-    return colorOrder.map((c) => {
+    return this.settings.map((callout) => {
       return {
-        color: c,
-        char: this.settings[c].char,
-        icon: this.settings[c].icon,
+        ...callout,
         re: new RegExp(
-          `(^\\s*[-*+] |^\\s*\\d+[\\.\\)] )${escapeStringRegexp(
-            this.settings[c].char
-          )} `
+          `(^\\s*[-*+] |^\\s*\\d+[\\.\\)] )${escapeStringRegexp(callout.char)} `
         ),
       };
     });
   }
 
   buildPostProcessorConfig() {
-    this.postProcessorConfig = colorOrder.map((c) => {
+    this.postProcessorConfig = this.settings.map((callout) => {
       return {
-        color: c,
-        char: this.settings[c].char,
-        icon: this.settings[c].icon,
-        re: new RegExp(`^${escapeStringRegexp(this.settings[c].char)} `),
+        ...callout,
+        re: new RegExp(`^${escapeStringRegexp(callout.char)} `),
       };
     });
   }
 
   async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    const loadedSettings = await this.loadData();
+
+    this.settings = DEFAULT_SETTINGS.map((s, i) => {
+      return Object.assign({}, s, loadedSettings[i]);
+    })
   }
 
   async saveSettings() {

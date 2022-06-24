@@ -40,34 +40,20 @@ export const iconOptions = [
   "quote-glyph",
 ];
 
-export const colorOrder = [
-  "255, 214, 0",
-  "255, 145, 0",
-  "255, 23, 68",
-  "124, 77, 255",
-  "0, 184, 212",
-  "0, 200, 83",
-  "158, 158, 158",
-];
-
 export interface Callout {
   char: string;
+  color: string;
   icon?: string;
 }
 
 export interface CalloutConfig extends Callout {
-  color: string;
   re: RegExp;
 }
 
-export type ListCalloutsSettings = Record<string, Callout>;
+export type ListCalloutsSettings = Callout[];
 
 // Build a static CM6 list line with callout markup applied
-export function buildSettingCallout(
-  root: HTMLElement,
-  color: string,
-  callout: Callout
-) {
+export function buildSettingCallout(root: HTMLElement, callout: Callout) {
   root.empty();
   root.createDiv(
     {
@@ -78,7 +64,7 @@ export function buildSettingCallout(
         {
           cls: "HyperMD-list-line HyperMD-list-line-1 lc-list-callout cm-line",
           attr: {
-            style: `text-indent: -8px; padding-left: 12px; --lc-callout-color: ${color}`,
+            style: `text-indent: -8px; padding-left: 12px; --lc-callout-color: ${callout.color}`,
           },
         },
         (mockListLine) => {
@@ -112,13 +98,13 @@ export function buildSettingCallout(
 export function buildSetting(
   containerEl: HTMLElement,
   plugin: ListCalloutsPlugin,
-  color: string,
+  index: number,
   callout: Callout
 ) {
   containerEl.createDiv({ cls: "lc-setting" }, (el) => {
     const calloutContainer = el.createDiv({ cls: "lc-callout-container" });
 
-    buildSettingCallout(calloutContainer, color, callout);
+    buildSettingCallout(calloutContainer, callout);
 
     el.createDiv({ cls: "lc-input-container" }, (inputContainer) => {
       // Character input
@@ -127,10 +113,10 @@ export function buildSetting(
         .onChange((value) => {
           if (!value) return;
 
-          plugin.settings[color].char = value[0];
+          plugin.settings[index].char = value[0];
           plugin.saveSettings();
 
-          buildSettingCallout(calloutContainer, color, plugin.settings[color]);
+          buildSettingCallout(calloutContainer, plugin.settings[index]);
         });
 
       // Icon select menu
@@ -150,15 +136,11 @@ export function buildSetting(
           menu.addItem((item) => {
             item.setTitle("No icon");
             item.onClick(() => {
-              delete plugin.settings[color].icon;
+              delete plugin.settings[index].icon;
 
               plugin.saveSettings();
 
-              buildSettingCallout(
-                calloutContainer,
-                color,
-                plugin.settings[color]
-              );
+              buildSettingCallout(calloutContainer, plugin.settings[index]);
 
               btn.buttonEl.empty();
               btn.setButtonText("Set Icon");
@@ -170,15 +152,11 @@ export function buildSetting(
             menu.addItem((item) => {
               item.setIcon(icon);
               item.onClick(() => {
-                plugin.settings[color].icon = icon;
+                plugin.settings[index].icon = icon;
 
                 plugin.saveSettings();
 
-                buildSettingCallout(
-                  calloutContainer,
-                  color,
-                  plugin.settings[color]
-                );
+                buildSettingCallout(calloutContainer, plugin.settings[index]);
 
                 btn.buttonEl.empty();
                 btn.setIcon(icon);
@@ -220,13 +198,8 @@ export class ListCalloutSettings extends PluginSettingTab {
       })
     );
 
-    colorOrder.forEach((color) => {
-      buildSetting(
-        containerEl,
-        this.plugin,
-        color,
-        this.plugin.settings[color]
-      );
+    this.plugin.settings.forEach((callout, index) => {
+      buildSetting(containerEl, this.plugin, index, callout);
     });
   }
 }
