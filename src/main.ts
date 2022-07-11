@@ -105,8 +105,8 @@ export default class ListCalloutsPlugin extends Plugin {
     const loadedSettings = await this.loadData();
 
     this.settings = DEFAULT_SETTINGS.map((s, i) => {
-      return Object.assign({}, s, loadedSettings[i]);
-    })
+      return Object.assign({}, s, loadedSettings ? loadedSettings[i] : {});
+    });
   }
 
   async saveSettings() {
