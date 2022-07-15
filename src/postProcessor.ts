@@ -6,11 +6,17 @@ function getFirstTextNode(li: HTMLElement) {
   let node = li.firstChild;
 
   if (node?.nodeType !== document.TEXT_NODE) {
-    if (
-      node?.nodeType === document.ELEMENT_NODE &&
-      (node as Element).hasClass("list-collapse-indicator")
-    ) {
-      node = node.nextSibling;
+    if (node?.nodeType === document.ELEMENT_NODE) {
+      if ((node as Element).hasClass("list-collapse-indicator")) {
+        node = node.nextSibling;
+      }
+
+      if (
+        node?.nodeType === document.TEXT_NODE &&
+        ["\n", "\r\n"].includes((node as Text).nodeValue)
+      ) {
+        node = node.nextSibling;
+      }
 
       if (node?.nodeType === document.TEXT_NODE) {
         // continue
@@ -87,13 +93,19 @@ export function buildPostProcessor(
           node.replaceWith(
             createFragment((f) => {
               f.append(
-                createSpan({ cls: "lc-list-marker", text: text[0] }, (span) => {
-                  if (callout.icon) {
-                    setIcon(span, callout.icon);
+                createSpan(
+                  {
+                    cls: "lc-list-marker",
+                    text: text.slice(0, callout.char.length),
+                  },
+                  (span) => {
+                    if (callout.icon) {
+                      setIcon(span, callout.icon);
+                    }
                   }
-                })
+                )
               );
-              f.append(text.slice(1));
+              f.append(text.slice(callout.char.length));
             })
           );
 

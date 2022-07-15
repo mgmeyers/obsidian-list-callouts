@@ -113,7 +113,7 @@ export function buildSetting(
         .onChange((value) => {
           if (!value) return;
 
-          plugin.settings[index].char = value[0];
+          plugin.settings[index].char = value;
           plugin.saveSettings();
 
           buildSettingCallout(calloutContainer, plugin.settings[index]);
