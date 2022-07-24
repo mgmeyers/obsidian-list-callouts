@@ -1,11 +1,21 @@
 import { MarkdownPostProcessor, setIcon } from "obsidian";
-
 import { CalloutConfig } from "./settings";
 
 function getFirstTextNode(li: HTMLElement) {
   let node = li.firstChild;
 
-  if (node?.nodeType !== document.TEXT_NODE) {
+  if (
+    node?.nodeType !== document.TEXT_NODE ||
+    (node as Text).nodeValue === "\n" ||
+    (node as Text).nodeValue === "\r\n"
+  ) {
+    if (
+      node?.nodeType === document.TEXT_NODE &&
+      ((node as Text).nodeValue === "\n" || (node as Text).nodeValue === "\r\n")
+    ) {
+      node = node.nextSibling;
+    }
+
     if (node?.nodeType === document.ELEMENT_NODE) {
       if ((node as Element).hasClass("list-collapse-indicator")) {
         node = node.nextSibling;
@@ -13,7 +23,8 @@ function getFirstTextNode(li: HTMLElement) {
 
       if (
         node?.nodeType === document.TEXT_NODE &&
-        ["\n", "\r\n"].includes((node as Text).nodeValue)
+        ((node as Text).nodeValue === "\n" ||
+          (node as Text).nodeValue === "\r\n")
       ) {
         node = node.nextSibling;
       }
