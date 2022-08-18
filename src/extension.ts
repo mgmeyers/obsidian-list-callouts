@@ -82,6 +82,7 @@ export function buildCalloutDecos(view: EditorView) {
   if (!config.length) return Decoration.none;
 
   const builder = new RangeSetBuilder<Decoration>();
+  const seen: Set<number> = new Set();
 
   for (const { from, to } of view.visibleRanges) {
     for (let pos = from; pos <= to; ) {
@@ -91,6 +92,9 @@ export function buildCalloutDecos(view: EditorView) {
         const match = line.text.match(callout.re);
 
         if (match) {
+          if (seen.has(line.from)) break;
+          seen.add(line.from);
+
           const labelPos = line.from + match[1].length;
 
           // Set the line class and callout color
