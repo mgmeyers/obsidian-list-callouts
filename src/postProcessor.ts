@@ -2,49 +2,26 @@ import { MarkdownPostProcessor, setIcon } from "obsidian";
 import { CalloutConfig } from "./settings";
 
 function getFirstTextNode(li: HTMLElement) {
-  let node = li.firstChild;
-
-  if (
-    node?.nodeType !== document.TEXT_NODE ||
-    (node as Text).nodeValue === "\n" ||
-    (node as Text).nodeValue === "\r\n"
-  ) {
+  for (const node of li.childNodes) {
     if (
-      node?.nodeType === document.TEXT_NODE &&
-      ((node as Text).nodeValue === "\n" || (node as Text).nodeValue === "\r\n")
+      node.nodeType === document.ELEMENT_NODE &&
+      (node as HTMLElement).tagName === "P"
     ) {
-      node = node.nextSibling;
+      return node.firstChild;
     }
 
-    if (node?.nodeType === document.ELEMENT_NODE) {
-      if ((node as Element).hasClass("list-collapse-indicator")) {
-        node = node.nextSibling;
-      }
-
-      if (
-        node?.nodeType === document.TEXT_NODE &&
-        ((node as Text).nodeValue === "\n" ||
-          (node as Text).nodeValue === "\r\n")
-      ) {
-        node = node.nextSibling;
-      }
-
-      if (node?.nodeType === document.TEXT_NODE) {
-        // continue
-      } else if (
-        node?.nodeType === document.ELEMENT_NODE &&
-        node.firstChild?.nodeType === document.TEXT_NODE
-      ) {
-        node = node.firstChild;
-      } else {
-        return null;
-      }
-    } else {
-      return null;
+    if (node.nodeType !== document.TEXT_NODE) {
+      continue;
     }
+
+    if ((node as Text).nodeValue.trim() === "") {
+      continue;
+    }
+
+    return node;
   }
 
-  return node;
+  return null;
 }
 
 function wrapLiContent(li: HTMLElement) {

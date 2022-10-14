@@ -86,7 +86,7 @@ export default class ListCalloutsPlugin extends Plugin {
       return {
         ...callout,
         re: new RegExp(
-          `(^\\s*[-*+] |^\\s*\\d+[\\.\\)] )${escapeStringRegexp(callout.char)} `
+          `(^\\s*[-*+](?: \\[.\\])? |^\\s*\\d+[\\.\\)](?: \\[.\\])? )${escapeStringRegexp(callout.char)} `
         ),
       };
     });
