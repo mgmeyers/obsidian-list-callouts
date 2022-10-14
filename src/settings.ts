@@ -129,7 +129,7 @@ export function buildSetting(
 
         // Button
         btn.onClick((e) => {
-          const menu = new Menu();
+          const menu = new Menu().setUseNativeMenu(false);
 
           (menu as any).dom?.addClass("lc-menu");
 
