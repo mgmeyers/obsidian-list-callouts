@@ -32,11 +32,15 @@ function wrapLiContent(li: HTMLElement) {
     const child = li.childNodes.item(i);
 
     if (child.nodeType === document.ELEMENT_NODE) {
-      if ((child as Element).hasClass("list-collapse-indicator")) {
+      const el = child as Element;
+      if (
+        el.hasClass("list-collapse-indicator") ||
+        el.hasClass("list-bullet")
+      ) {
         continue;
       }
 
-      if (["UL", "OL"].includes((child as Element).tagName)) {
+      if (["UL", "OL"].includes(el.tagName)) {
         insertBefore = child;
         break;
       }
