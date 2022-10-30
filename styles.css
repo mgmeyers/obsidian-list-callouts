@@ -82,6 +82,8 @@ settings:
   --lc-bg-right: 0px;
   --lc-bg-bottom: 0px;
   --lc-bg-left: 17px;
+  --lc-bg-left-checkbox: 51px;
+  --lc-bg-left-checkbox-lp: 25px;
 
   --lc-bg-top-reading: 0px;
   --lc-bg-right-reading: 0px;
@@ -100,6 +102,14 @@ settings:
   display: block;
   padding: inherit;
   z-index: -1;
+}
+
+.task-list-label ~ .lc-list-bg {
+  left: calc(-1 * var(--lc-bg-left-checkbox-lp));
+}
+
+.markdown-source-view:not(.is-live-preview) .cm-formatting-task ~ .lc-list-bg {
+  left: calc(-1 * var(--lc-bg-left-checkbox));
 }
 
 .lc-list-bg::after {

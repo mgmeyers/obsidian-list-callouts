@@ -95,20 +95,10 @@ export function buildCalloutDecos(view: EditorView) {
           if (seen.has(line.from)) break;
           seen.add(line.from);
 
-          const labelPos = line.from + match[1].length;
+          const labelPos = line.from + match[1].length;          
 
           // Set the line class and callout color
           builder.add(line.from, line.from, calloutDecoration(callout.color));
-
-          // Add the callout background element
-          builder.add(
-            labelPos,
-            labelPos,
-            Decoration.replace({
-              widget: new CalloutBackground(),
-              side: 1,
-            })
-          );
 
           // Decorate the callout marker
           builder.add(
@@ -118,6 +108,17 @@ export function buildCalloutDecos(view: EditorView) {
               widget: new CalloutMarker(callout.char, callout.icon),
             })
           );
+
+          // Add the callout background element
+          builder.add(
+            line.to,
+            line.to,
+            Decoration.widget({
+              widget: new CalloutBackground(),
+              side: 1,
+            })
+          );
+
           break;
         }
       }
