@@ -100,7 +100,8 @@ settings:
   bottom: calc(-1 * var(--lc-bg-bottom));
   left: 0;
   display: block;
-  padding: inherit;
+  padding-top: inherit;
+  padding-bottom: inherit;
   z-index: -1;
 }
 
