@@ -98,14 +98,10 @@ settings:
   top: calc(-1 * var(--lc-bg-top));
   right: calc(-1 * var(--lc-bg-right));
   bottom: calc(-1 * var(--lc-bg-bottom));
-  left: calc(-1 * var(--lc-bg-left));
+  left: 0;
   display: block;
   padding: inherit;
   z-index: -1;
-}
-
-.task-list-label ~ .lc-list-bg {
-  left: calc(-1 * var(--lc-bg-left-checkbox-lp));
 }
 
 .markdown-source-view:not(.is-live-preview) .cm-formatting-task ~ .lc-list-bg {
@@ -147,7 +143,7 @@ settings:
   top: calc(-1 * var(--lc-bg-top-reading) + 1px);
   right: calc(-1 * var(--lc-bg-right-reading) + 1px);
   bottom: calc(-1 * var(--lc-bg-bottom-reading) + 1px);
-  left: calc(-1 * var(--lc-bg-left-reading) + 1px);
+  left: calc(-1 * var(--list-indent));
   content: "";
   display: block;
   border-radius: 4px;
