@@ -10,7 +10,7 @@ settings:
     default: 0
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
   - 
     id: lc-bg-right
@@ -19,7 +19,7 @@ settings:
     default: 0
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
   - 
     id: lc-bg-bottom
@@ -28,7 +28,7 @@ settings:
     default: 0
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
   - 
     id: lc-bg-left
@@ -37,7 +37,25 @@ settings:
     default: 17
     format: px
     min: 0
-    max: 30
+    max: 60
+    step: 1
+  - 
+    id: lc-bg-left-checkbox-lp
+    title: "Callout Padding: Left (live preview checkbox)"
+    type: variable-number-slider
+    default: 30
+    format: px
+    min: 0
+    max: 60
+    step: 1
+  - 
+    id: lc-bg-left-checkbox-lp
+    title: "Callout Padding: Left (source checkbox)"
+    type: variable-number-slider
+    default: 50
+    format: px
+    min: 0
+    max: 60
     step: 1
   - 
     id: lc-bg-top-reading
@@ -46,7 +64,7 @@ settings:
     default: 0
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
   - 
     id: lc-bg-right-reading
@@ -55,7 +73,7 @@ settings:
     default: 0
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
   - 
     id: lc-bg-bottom-reading
@@ -64,16 +82,16 @@ settings:
     default: 0
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
   - 
     id: lc-bg-left-reading
     title: "Callout Padding: Left (reading mode)"
     type: variable-number-slider
-    default: 17
+    default: 27
     format: px
     min: 0
-    max: 30
+    max: 60
     step: 1
 */
 
@@ -82,13 +100,13 @@ settings:
   --lc-bg-right: 0px;
   --lc-bg-bottom: 0px;
   --lc-bg-left: 17px;
-  --lc-bg-left-checkbox: 51px;
-  --lc-bg-left-checkbox-lp: 25px;
+  --lc-bg-left-checkbox: 50px;
+  --lc-bg-left-checkbox-lp: 30px;
 
   --lc-bg-top-reading: 0px;
   --lc-bg-right-reading: 0px;
   --lc-bg-bottom-reading: 0px;
-  --lc-bg-left-reading: 20px;
+  --lc-bg-left-reading: 27px;
 }
 
 .lc-list-bg {
