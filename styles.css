@@ -49,7 +49,7 @@ settings:
     max: 60
     step: 1
   - 
-    id: lc-bg-left-checkbox-lp
+    id: lc-bg-left-checkbox
     title: "Callout Padding: Left (source checkbox)"
     type: variable-number-slider
     default: 50
