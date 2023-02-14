@@ -183,9 +183,13 @@ settings:
   z-index: 0;
 }
 
+.lc-setting input,
+.lc-setting .lc-input-container > button {
+  margin-right: 10px;
+}
+
 .lc-setting input {
   width: 4em;
-  margin-right: 10px;
 }
 
 .lc-callout-container {
@@ -197,6 +201,11 @@ settings:
 .lc-input-container {
   display: flex;
   align-items: center;
+}
+
+.lc-input-right-align {
+  flex-grow: 1;
+  text-align: right;
 }
 
 .lc-menu .menu-item-icon,

@@ -2,6 +2,7 @@ import { EditorView } from "@codemirror/view";
 import { debounce, Events, MarkdownView, Plugin } from "obsidian";
 import escapeStringRegexp from "escape-string-regexp";
 import {
+  Callout,
   CalloutConfig,
   ListCalloutSettings,
   ListCalloutsSettings,
@@ -102,11 +103,15 @@ export default class ListCalloutsPlugin extends Plugin {
   }
 
   async loadSettings() {
-    const loadedSettings = await this.loadData();
+    const loadedSettings = await this.loadData() as Callout[];
+    const customCallouts = loadedSettings.filter(callout => callout.custom === true);
+    const modifiedBuiltins = loadedSettings.filter(callout => callout.custom !== true);
 
     this.settings = DEFAULT_SETTINGS.map((s, i) => {
-      return Object.assign({}, s, loadedSettings ? loadedSettings[i] : {});
+      return Object.assign({}, s, loadedSettings ? modifiedBuiltins[i] : {});
     });
+
+    this.settings.push(...customCallouts);
   }
 
   async saveSettings() {
