@@ -12,31 +12,31 @@ import { buildPostProcessor } from "./postProcessor";
 
 const DEFAULT_SETTINGS: ListCalloutsSettings = [
   {
-    color: "255, 214, 0",
+    color: "var(--color-yellow-rgb)",
     char: "&",
   },
   {
-    color: "255, 145, 0",
+    color: "var(--color-orange-rgb)",
     char: "?",
   },
   {
-    color: "255, 23, 68",
+    color: "var(--color-red-rgb)",
     char: "!",
   },
   {
-    color: "124, 77, 255",
+    color: "var(--color-purple-rgb)",
     char: "~",
   },
   {
-    color: "0, 184, 212",
+    color: "var(--color-blue-rgb)",
     char: "@",
   },
   {
-    color: "0, 200, 83",
+    color: "var(--color-green-rgb)",
     char: "$",
   },
   {
-    color: "158, 158, 158",
+    color: "var(--callout-quote)",
     char: "%",
   },
 ];

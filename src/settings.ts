@@ -235,7 +235,7 @@ function buildNewCalloutSetting(
 ) {
   const callout: Callout = {
     char: "",
-    color: "127, 127, 127",
+    color: "158, 158, 158",
     icon: null,
     custom: true,
   };
