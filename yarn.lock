@@ -782,10 +782,10 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-obsidian@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/obsidian/-/obsidian-0.16.3.tgz#137b7e91f949517a1bc817b1d7ef9b8aefb219bc"
-  integrity sha512-hal9qk1A0GMhHSeLr2/+o3OpLmImiP+Y+sx2ewP13ds76KXsziG96n+IPFT0mSkup1zSwhEu+DeRhmbcyCCXWw==
+obsidian@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/obsidian/-/obsidian-1.1.1.tgz#7cce6f19a6dd1cc5ec7e9f7dff8ea3ceacf2e2c3"
+  integrity sha512-GcxhsHNkPEkwHEjeyitfYNBcQuYGeAHFs1pEpZIv0CnzSfui8p8bPLm2YKLgcg20B764770B1sYGtxCvk9ptxg==
   dependencies:
     "@types/codemirror" "0.0.108"
     moment "2.29.4"

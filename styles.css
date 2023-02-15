@@ -208,14 +208,23 @@ settings:
   text-align: right;
 }
 
-.lc-menu .menu-item-icon,
-.lc-menu > .menu-item {
+.lc-menu {
+  --icon-color: var(--text-normal);
+	--icon-color-hover: var(--text-normal);
+	--icon-color-active: var(--text-accent);
+	--icon-color-focused: var(--text-normal);
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  width: 250px;
+  height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lc-menu .menu-item-title:empty,
-.lc-menu .menu-item-icon:empty {
-  display: none;
+  flex-wrap: wrap;
+  gap: 4px;
+  z-index: 10;
+  padding: 4px;
+  box-shadow: var(--shadow-s);
 }
