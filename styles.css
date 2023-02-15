@@ -178,6 +178,10 @@ settings:
   border-top: 1px solid var(--background-modifier-border);
 }
 
+.lc-setting:last-child {
+  padding-bottom: 200px;
+}
+
 .lc-setting .lc-list-bg {
   background-color: transparent;
   z-index: 0;

@@ -72,30 +72,30 @@ function attachIconMenu(
 ) {
   let menuRef: HTMLDivElement = null;
   const btnEl = btn.buttonEl;
+
   btn.onClick((e) => {
     e.preventDefault();
+    const scrollParent = btnEl.closest(".vertical-tab-content");
+    const destroyEventHandlers = () => {
+      btnEl.win.removeEventListener("click", clickOutside);
+      scrollParent.removeEventListener("scroll", scroll);
+    };
     const clickOutside = (e: MouseEvent) => {
       if (menuRef) {
         if (!menuRef.contains(e.targetNode)) {
           menuRef.detach();
           menuRef = null;
-          btnEl.win.removeEventListener("click", clickOutside);
+          destroyEventHandlers();
         }
       } else {
-        btnEl.win.removeEventListener("click", clickOutside);
+        destroyEventHandlers();
       }
     };
 
-    if (menuRef) {
-      menuRef.detach();
-      menuRef = null;
-      btnEl.win.removeEventListener("click", clickOutside);
-      return;
-    }
-
-    createDiv("lc-menu", (menu) => {
-      menuRef = menu;
-      let pos = `top: ${btnEl.offsetTop + btnEl.offsetHeight + 2}px;`;
+    const calcMenuPos = () => {
+      let pos = `top: ${
+        btnEl.offsetTop + btnEl.offsetHeight + 2 - scrollParent.scrollTop
+      }px;`;
       if (Platform.isMobile) {
         pos += ` right: ${
           btnEl.offsetParent.clientWidth -
@@ -105,7 +105,27 @@ function attachIconMenu(
         pos += ` left: ${btnEl.offsetLeft}px;`;
       }
       menuRef.style.cssText = pos;
+    };
+
+    const scroll = () => {
+      if (menuRef) {
+        calcMenuPos();
+      } else {
+        destroyEventHandlers();
+      }
+    };
+
+    if (menuRef) {
+      destroyEventHandlers();
+      menuRef.detach();
+      menuRef = null;
+      return;
+    }
+
+    createDiv("lc-menu", (menu) => {
+      menuRef = menu;
       btnEl.after(menuRef);
+      calcMenuPos();
 
       // Menu
       getIconIds().forEach((icon) => {
@@ -115,6 +135,7 @@ function attachIconMenu(
             btn.buttonEl.empty();
             btn.setIcon(icon);
             onSelect(icon);
+            destroyEventHandlers();
             menuRef.detach();
             menuRef = null;
           });
@@ -124,6 +145,7 @@ function attachIconMenu(
 
     btnEl.win.setTimeout(() => {
       btnEl.win.addEventListener("click", clickOutside);
+      scrollParent.addEventListener("scroll", scroll);
     }, 10);
   });
 }
