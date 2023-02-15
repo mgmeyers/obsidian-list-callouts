@@ -12,31 +12,31 @@ import { buildPostProcessor } from "./postProcessor";
 
 const DEFAULT_SETTINGS: ListCalloutsSettings = [
   {
-    color: "var(--color-yellow-rgb)",
+    color: "255, 214, 0",
     char: "&",
   },
   {
-    color: "var(--color-orange-rgb)",
+    color: "255, 145, 0",
     char: "?",
   },
   {
-    color: "var(--color-red-rgb)",
+    color: "255, 23, 68",
     char: "!",
   },
   {
-    color: "var(--color-purple-rgb)",
+    color: "124, 77, 255",
     char: "~",
   },
   {
-    color: "var(--color-blue-rgb)",
+    color: "0, 184, 212",
     char: "@",
   },
   {
-    color: "var(--color-green-rgb)",
+    color: "0, 200, 83",
     char: "$",
   },
   {
-    color: "var(--callout-quote)",
+    color: "158, 158, 158",
     char: "%",
   },
 ];
@@ -87,7 +87,9 @@ export default class ListCalloutsPlugin extends Plugin {
       return {
         ...callout,
         re: new RegExp(
-          `(^\\s*[-*+](?: \\[.\\])? |^\\s*\\d+[\\.\\)](?: \\[.\\])? )${escapeStringRegexp(callout.char)} `
+          `(^\\s*[-*+](?: \\[.\\])? |^\\s*\\d+[\\.\\)](?: \\[.\\])? )${escapeStringRegexp(
+            callout.char
+          )} `
         ),
       };
     });
@@ -103,9 +105,13 @@ export default class ListCalloutsPlugin extends Plugin {
   }
 
   async loadSettings() {
-    const loadedSettings = await this.loadData() as Callout[];
-    const customCallouts = loadedSettings?.filter(callout => callout.custom === true);
-    const modifiedBuiltins = loadedSettings?.filter(callout => callout.custom !== true);
+    const loadedSettings = (await this.loadData()) as Callout[];
+    const customCallouts = loadedSettings?.filter(
+      (callout) => callout.custom === true
+    );
+    const modifiedBuiltins = loadedSettings?.filter(
+      (callout) => callout.custom !== true
+    );
 
     this.settings = DEFAULT_SETTINGS.map((s, i) => {
       return Object.assign({}, s, modifiedBuiltins ? modifiedBuiltins[i] : {});
