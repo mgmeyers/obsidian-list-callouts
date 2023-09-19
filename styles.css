@@ -120,6 +120,7 @@ settings:
   display: block;
   padding: inherit;
   z-index: -1;
+  cursor: text;
 }
 
 .task-list-label ~ .lc-list-bg {
