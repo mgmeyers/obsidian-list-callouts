@@ -176,7 +176,7 @@ export function buildSetting(
         });
 
       // Icon select menu
-      new ButtonComponent(inputContainer).then((btn) => {
+      const iconBtn = new ButtonComponent(inputContainer).then((btn) => {
         if (callout.icon) {
           btn.setIcon(callout.icon);
         } else {
@@ -190,6 +190,17 @@ export function buildSetting(
             plugin.settings[index].icon = icon;
           }
 
+          plugin.saveSettings();
+          buildSettingCallout(calloutContainer, plugin.settings[index]);
+        });
+      });
+
+      new ButtonComponent(inputContainer).then((btn) => {
+        btn.setButtonText("Clear Icon");
+        btn.onClick(() => {
+          delete plugin.settings[index].icon;
+          iconBtn.buttonEl.empty();
+          iconBtn.setButtonText("Set Icon");
           plugin.saveSettings();
           buildSettingCallout(calloutContainer, plugin.settings[index]);
         });

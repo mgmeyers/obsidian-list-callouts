@@ -3,7 +3,7 @@
 name: List Callouts
 id: list-callouts
 settings:
-  - 
+  -
     id: lc-bg-top
     title: "Callout Padding: Top"
     type: variable-number-slider
@@ -12,7 +12,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-right
     title: "Callout Padding: Right"
     type: variable-number-slider
@@ -21,7 +21,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-bottom
     title: "Callout Padding: Bottom"
     type: variable-number-slider
@@ -30,7 +30,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-left
     title: "Callout Padding: Left"
     type: variable-number-slider
@@ -39,7 +39,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-left-checkbox-lp
     title: "Callout Padding: Left (live preview checkbox)"
     type: variable-number-slider
@@ -48,7 +48,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-left-checkbox
     title: "Callout Padding: Left (source checkbox)"
     type: variable-number-slider
@@ -57,7 +57,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-top-reading
     title: "Callout Padding: Top (reading mode)"
     type: variable-number-slider
@@ -66,7 +66,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-right-reading
     title: "Callout Padding: Right (reading mode)"
     type: variable-number-slider
@@ -75,7 +75,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-bottom-reading
     title: "Callout Padding: Bottom (reading mode)"
     type: variable-number-slider
@@ -84,7 +84,7 @@ settings:
     min: 0
     max: 60
     step: 1
-  - 
+  -
     id: lc-bg-left-reading
     title: "Callout Padding: Left (reading mode)"
     type: variable-number-slider
@@ -144,6 +144,7 @@ settings:
   font-family: var(--font-monospace);
   font-weight: bold;
   color: rgb(var(--lc-callout-color));
+  pointer-events: none;
 }
 
 .lc-list-marker > svg {
