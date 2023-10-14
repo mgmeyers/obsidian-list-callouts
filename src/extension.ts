@@ -1,3 +1,4 @@
+import { RangeSetBuilder, StateEffect, StateField } from '@codemirror/state';
 import {
   Decoration,
   DecorationSet,
@@ -5,20 +6,19 @@ import {
   ViewPlugin,
   ViewUpdate,
   WidgetType,
-} from "@codemirror/view";
-import { RangeSetBuilder, StateEffect, StateField } from "@codemirror/state";
+} from '@codemirror/view';
+import { setIcon } from 'obsidian';
 
-import { CalloutConfig } from "./settings";
-import { setIcon } from "obsidian";
+import { CalloutConfig } from './settings';
 
 export const setConfig = StateEffect.define<CalloutConfig[]>();
 
 export class CalloutBackground extends WidgetType {
   toDOM() {
     return createSpan({
-      cls: "lc-list-bg",
+      cls: 'lc-list-bg',
       attr: {
-        "aria-hidden": "true",
+        'aria-hidden': 'true',
       },
     });
   }
@@ -39,9 +39,9 @@ export class CalloutMarker extends WidgetType {
     return createSpan(
       {
         text: this.char,
-        cls: "lc-list-marker",
+        cls: 'lc-list-marker',
         attr: {
-          "aria-hidden": "true",
+          'aria-hidden': 'true',
         },
       },
       (s) => {
@@ -56,7 +56,7 @@ export class CalloutMarker extends WidgetType {
 export const calloutDecoration = (color: string) =>
   Decoration.line({
     attributes: {
-      class: "lc-list-callout",
+      class: 'lc-list-callout',
       style: `--lc-callout-color: ${color}`,
     },
   });
@@ -95,7 +95,7 @@ export function buildCalloutDecos(view: EditorView) {
           if (seen.has(line.from)) break;
           seen.add(line.from);
 
-          const labelPos = line.from + match[1].length;          
+          const labelPos = line.from + match[1].length;
 
           // Set the line class and callout color
           builder.add(line.from, line.from, calloutDecoration(callout.color));

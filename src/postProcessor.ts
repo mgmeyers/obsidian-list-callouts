@@ -1,11 +1,12 @@
-import { MarkdownPostProcessor, setIcon } from "obsidian";
-import { CalloutConfig } from "./settings";
+import { MarkdownPostProcessor, setIcon } from 'obsidian';
+
+import { CalloutConfig } from './settings';
 
 function getFirstTextNode(li: HTMLElement) {
   for (const node of li.childNodes) {
     if (
       node.nodeType === document.ELEMENT_NODE &&
-      (node as HTMLElement).tagName === "P"
+      (node as HTMLElement).tagName === 'P'
     ) {
       return node.firstChild;
     }
@@ -14,7 +15,7 @@ function getFirstTextNode(li: HTMLElement) {
       continue;
     }
 
-    if ((node as Text).nodeValue.trim() === "") {
+    if ((node as Text).nodeValue.trim() === '') {
       continue;
     }
 
@@ -34,13 +35,13 @@ function wrapLiContent(li: HTMLElement) {
     if (child.nodeType === document.ELEMENT_NODE) {
       const el = child as Element;
       if (
-        el.hasClass("list-collapse-indicator") ||
-        el.hasClass("list-bullet")
+        el.hasClass('list-collapse-indicator') ||
+        el.hasClass('list-bullet')
       ) {
         continue;
       }
 
-      if (["UL", "OL"].includes(el.tagName)) {
+      if (['UL', 'OL'].includes(el.tagName)) {
         insertBefore = child;
         break;
       }
@@ -49,7 +50,7 @@ function wrapLiContent(li: HTMLElement) {
     toReplace.push(child);
   }
 
-  const wrapper = createSpan({ cls: "lc-li-wrapper" });
+  const wrapper = createSpan({ cls: 'lc-li-wrapper' });
 
   toReplace.forEach((node) => wrapper.append(node));
 
@@ -66,7 +67,7 @@ export function buildPostProcessor(
   return (el) => {
     const config = getConfig();
 
-    el.findAll("li").forEach((li) => {
+    el.findAll('li').forEach((li) => {
       const node = getFirstTextNode(li);
 
       if (!node) return;
@@ -79,15 +80,15 @@ export function buildPostProcessor(
         const match = text.match(callout.re);
 
         if (match) {
-          li.addClass("lc-list-callout");
-          li.style.setProperty("--lc-callout-color", callout.color);
+          li.addClass('lc-list-callout');
+          li.style.setProperty('--lc-callout-color', callout.color);
 
           node.replaceWith(
             createFragment((f) => {
               f.append(
                 createSpan(
                   {
-                    cls: "lc-list-marker",
+                    cls: 'lc-list-marker',
                     text: text.slice(0, callout.char.length),
                   },
                   (span) => {

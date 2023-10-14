@@ -1,14 +1,15 @@
 import {
   ButtonComponent,
   ColorComponent,
+  Platform,
   PluginSettingTab,
-  setIcon,
   Setting,
   TextComponent,
   getIconIds,
-  Platform,
-} from "obsidian";
-import ListCalloutsPlugin from "./main";
+  setIcon,
+} from 'obsidian';
+
+import ListCalloutsPlugin from './main';
 
 export interface Callout {
   char: string;
@@ -28,12 +29,12 @@ export function buildSettingCallout(root: HTMLElement, callout: Callout) {
   root.empty();
   root.createDiv(
     {
-      cls: "markdown-source-view cm-s-obsidian mod-cm6 is-readable-line-width is-live-preview",
+      cls: 'markdown-source-view cm-s-obsidian mod-cm6 is-readable-line-width is-live-preview',
     },
     (mockSrcView) => {
       mockSrcView.createDiv(
         {
-          cls: "HyperMD-list-line HyperMD-list-line-1 lc-list-callout cm-line",
+          cls: 'HyperMD-list-line HyperMD-list-line-1 lc-list-callout cm-line',
           attr: {
             style: `text-indent: -8px; padding-left: 12px; --lc-callout-color: ${callout.color}`,
           },
@@ -41,15 +42,15 @@ export function buildSettingCallout(root: HTMLElement, callout: Callout) {
         (mockListLine) => {
           mockListLine.createSpan(
             {
-              cls: "cm-formatting cm-formatting-list cm-formatting-list-ul cm-list-1",
+              cls: 'cm-formatting cm-formatting-list cm-formatting-list-ul cm-list-1',
             },
             (span) => {
-              span.createSpan({ cls: "list-bullet", text: "-" });
-              span.appendText(" ");
+              span.createSpan({ cls: 'list-bullet', text: '-' });
+              span.appendText(' ');
             }
           );
-          mockListLine.createSpan({ cls: "lc-list-bg" });
-          mockListLine.createSpan({ cls: "lc-list-marker" }, (span) => {
+          mockListLine.createSpan({ cls: 'lc-list-bg' });
+          mockListLine.createSpan({ cls: 'lc-list-marker' }, (span) => {
             if (callout.icon) {
               setIcon(span, callout.icon);
             } else {
@@ -57,8 +58,8 @@ export function buildSettingCallout(root: HTMLElement, callout: Callout) {
             }
           });
           mockListLine.createSpan({
-            cls: "cm-list-1",
-            text: " Sed eu nisl rhoncus, consectetur mi quis, scelerisque enim.",
+            cls: 'cm-list-1',
+            text: ' Sed eu nisl rhoncus, consectetur mi quis, scelerisque enim.',
           });
         }
       );
@@ -75,10 +76,10 @@ function attachIconMenu(
 
   btn.onClick((e) => {
     e.preventDefault();
-    const scrollParent = btnEl.closest(".vertical-tab-content");
+    const scrollParent = btnEl.closest('.vertical-tab-content');
     const destroyEventHandlers = () => {
-      btnEl.win.removeEventListener("click", clickOutside);
-      scrollParent.removeEventListener("scroll", scroll);
+      btnEl.win.removeEventListener('click', clickOutside);
+      scrollParent.removeEventListener('scroll', scroll);
     };
     const clickOutside = (e: MouseEvent) => {
       if (menuRef) {
@@ -122,14 +123,14 @@ function attachIconMenu(
       return;
     }
 
-    createDiv("lc-menu", (menu) => {
+    createDiv('lc-menu', (menu) => {
       menuRef = menu;
       btnEl.after(menuRef);
       calcMenuPos();
 
       // Menu
       getIconIds().forEach((icon) => {
-        menuRef.createDiv("clickable-icon", (item) => {
+        menuRef.createDiv('clickable-icon', (item) => {
           setIcon(item, icon);
           item.onClickEvent(() => {
             btn.buttonEl.empty();
@@ -144,8 +145,8 @@ function attachIconMenu(
     });
 
     btnEl.win.setTimeout(() => {
-      btnEl.win.addEventListener("click", clickOutside);
-      scrollParent.addEventListener("scroll", scroll);
+      btnEl.win.addEventListener('click', clickOutside);
+      scrollParent.addEventListener('scroll', scroll);
     }, 10);
   });
 }
@@ -157,12 +158,12 @@ export function buildSetting(
   callout: Callout,
   onDelete: (index: number) => void
 ) {
-  containerEl.createDiv({ cls: "lc-setting" }, (el) => {
-    const calloutContainer = el.createDiv({ cls: "lc-callout-container" });
+  containerEl.createDiv({ cls: 'lc-setting' }, (el) => {
+    const calloutContainer = el.createDiv({ cls: 'lc-callout-container' });
 
     buildSettingCallout(calloutContainer, callout);
 
-    el.createDiv({ cls: "lc-input-container" }, (inputContainer) => {
+    el.createDiv({ cls: 'lc-input-container' }, (inputContainer) => {
       // Character input
       new TextComponent(inputContainer)
         .setValue(callout.char)
@@ -180,7 +181,7 @@ export function buildSetting(
         if (callout.icon) {
           btn.setIcon(callout.icon);
         } else {
-          btn.setButtonText("Set Icon");
+          btn.setButtonText('Set Icon');
         }
 
         attachIconMenu(btn, (icon) => {
@@ -196,11 +197,11 @@ export function buildSetting(
       });
 
       new ButtonComponent(inputContainer).then((btn) => {
-        btn.setButtonText("Clear Icon");
+        btn.setButtonText('Clear Icon');
         btn.onClick(() => {
           delete plugin.settings[index].icon;
           iconBtn.buttonEl.empty();
-          iconBtn.setButtonText("Set Icon");
+          iconBtn.setButtonText('Set Icon');
           plugin.saveSettings();
           buildSettingCallout(calloutContainer, plugin.settings[index]);
         });
@@ -209,7 +210,7 @@ export function buildSetting(
       // Color selection.
       if (callout.custom) {
         const [r, g, b] = callout.color
-          .split(",")
+          .split(',')
           .map((v) => parseInt(v.trim(), 10));
 
         const color = new ColorComponent(inputContainer)
@@ -226,10 +227,10 @@ export function buildSetting(
       // Delete button.
       if (callout.custom) {
         const rightAlign = inputContainer.createDiv({
-          cls: "lc-input-right-align",
+          cls: 'lc-input-right-align',
         });
         new ButtonComponent(rightAlign)
-          .setButtonText("Delete")
+          .setButtonText('Delete')
           .setWarning()
           .onClick((_e) => {
             onDelete(index);
@@ -245,40 +246,40 @@ function buildNewCalloutSetting(
   onSubmit: (callout: Callout) => void
 ) {
   const callout: Callout = {
-    char: "",
-    color: "158, 158, 158",
+    char: '',
+    color: '158, 158, 158',
     icon: null,
     custom: true,
   };
 
-  containerEl.createDiv({ cls: "lc-setting" }, (settingContainer) => {
-    settingContainer.createDiv({ cls: "setting-item-name" }, (e) =>
-      e.setText("Create a new Callout")
+  containerEl.createDiv({ cls: 'lc-setting' }, (settingContainer) => {
+    settingContainer.createDiv({ cls: 'setting-item-name' }, (e) =>
+      e.setText('Create a new Callout')
     );
-    settingContainer.createDiv({ cls: "setting-item-description" }, (e) =>
-      e.setText("Create additional list callout styles.")
+    settingContainer.createDiv({ cls: 'setting-item-description' }, (e) =>
+      e.setText('Create additional list callout styles.')
     );
 
     // Preview.
     const calloutContainer = settingContainer.createDiv({
-      cls: "lc-callout-container",
+      cls: 'lc-callout-container',
     });
 
     // Callout character.
     const inputContainer = settingContainer.createDiv({
-      cls: "lc-input-container",
+      cls: 'lc-input-container',
     });
 
     const char = new TextComponent(inputContainer)
-      .setValue("")
-      .setPlaceholder("...")
+      .setValue('')
+      .setPlaceholder('...')
       .onChange((value) => {
         callout.char = value;
         redraw();
       });
 
     // Callout icon.
-    const icon = new ButtonComponent(inputContainer).setButtonText("Set Icon");
+    const icon = new ButtonComponent(inputContainer).setButtonText('Set Icon');
 
     attachIconMenu(icon, (icon) => {
       if (icon == null) {
@@ -300,10 +301,10 @@ function buildNewCalloutSetting(
 
     // Create button.
     const rightAlign = inputContainer.createDiv({
-      cls: "lc-input-right-align",
+      cls: 'lc-input-right-align',
     });
     const submit = new ButtonComponent(rightAlign)
-      .setButtonText("Create")
+      .setButtonText('Create')
       .setDisabled(true)
       .onClick(() => {
         onSubmit(callout);
@@ -340,12 +341,12 @@ export class ListCalloutSettings extends PluginSettingTab {
     new Setting(containerEl).setDesc(
       createFragment((f) => {
         f.appendText(
-          "See the Style Settings plugin for additional configuration options."
+          'See the Style Settings plugin for additional configuration options.'
         );
-        f.append(createEl("br"));
+        f.append(createEl('br'));
         f.append(
-          createEl("strong", {
-            text: "Note: Using +, *, -, >, or # as the callout character can disrupt reading mode.",
+          createEl('strong', {
+            text: 'Note: Using +, *, -, >, or # as the callout character can disrupt reading mode.',
           })
         );
       })
