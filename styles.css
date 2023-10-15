@@ -219,18 +219,34 @@ settings:
 	--icon-color-hover: var(--text-normal);
 	--icon-color-active: var(--text-accent);
 	--icon-color-focused: var(--text-normal);
+
   background-color: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--radius-m);
   width: 250px;
   height: 200px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   position: absolute;
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  flex-direction: column;
+  gap: 8px;
   z-index: 10;
   padding: 4px;
   box-shadow: var(--shadow-s);
+}
+
+.lc-menu-search input {
+  width: 100%;
+}
+
+.lc-menu-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-grow: 1;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-start;
 }

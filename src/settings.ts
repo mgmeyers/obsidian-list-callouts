@@ -5,10 +5,12 @@ import {
   PluginSettingTab,
   Setting,
   TextComponent,
+  debounce,
   getIconIds,
   setIcon,
 } from 'obsidian';
 
+import { iconList as icons } from './iconList';
 import ListCalloutsPlugin from './main';
 
 export interface Callout {
@@ -128,18 +130,69 @@ function attachIconMenu(
       btnEl.after(menuRef);
       calcMenuPos();
 
-      // Menu
-      getIconIds().forEach((icon) => {
-        menuRef.createDiv('clickable-icon', (item) => {
-          setIcon(item, icon);
-          item.onClickEvent(() => {
-            btn.buttonEl.empty();
-            btn.setIcon(icon);
-            onSelect(icon);
-            destroyEventHandlers();
-            menuRef.detach();
-            menuRef = null;
-          });
+      const iconEls: Record<string, HTMLDivElement> = {};
+
+      menu.createDiv('lc-menu-search', (el) => {
+        el.createEl(
+          'input',
+          {
+            attr: {
+              type: 'text',
+              placeholder: 'Search...',
+            },
+          },
+          (input) => {
+            activeWindow.setTimeout(() => {
+              input.focus();
+            });
+            const handler = debounce(
+              () => {
+                const res = icons.search(input.value);
+
+                if (!input.value) {
+                  getIconIds().forEach((icon) => {
+                    iconList.append(iconEls[icon]);
+                  });
+                  return;
+                }
+
+                iconList.empty();
+
+                res.forEach((r) => {
+                  iconList.append(iconEls[r.item.id]);
+                });
+              },
+              250,
+              true
+            );
+            input.addEventListener('input', handler);
+          }
+        );
+      });
+
+      const iconList = menu.createDiv('lc-menu-icons', (el) => {
+        // Menu
+        getIconIds().forEach((icon) => {
+          el.createDiv(
+            {
+              cls: 'clickable-icon',
+              attr: {
+                'data-icon': icon,
+              },
+            },
+            (item) => {
+              iconEls[icon] = item;
+              setIcon(item, icon);
+              item.onClickEvent(() => {
+                btn.buttonEl.empty();
+                btn.setIcon(icon);
+                onSelect(icon);
+                destroyEventHandlers();
+                menuRef.detach();
+                menuRef = null;
+              });
+            }
+          );
         });
       });
     });
