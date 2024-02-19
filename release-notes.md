@@ -1,1 +1,1 @@
-fdca177 Add search box for icons; fixes #37
+c677dde Prevent infinite loop
