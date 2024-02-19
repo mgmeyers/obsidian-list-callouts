@@ -1,4 +1,10 @@
-import { RangeSetBuilder, StateEffect, StateField } from '@codemirror/state';
+import { ensureSyntaxTree, tokenClassNodeProp } from '@codemirror/language';
+import {
+  EditorState,
+  RangeSetBuilder,
+  StateEffect,
+  StateField,
+} from '@codemirror/state';
 import {
   Decoration,
   DecorationSet,
@@ -76,55 +82,65 @@ export const calloutsConfigField = StateField.define<CalloutConfig[]>({
   },
 });
 
-export function buildCalloutDecos(view: EditorView) {
-  const config = view.state.field(calloutsConfigField);
+export function buildCalloutDecos(view: EditorView, state: EditorState) {
+  const config = state.field(calloutsConfigField);
 
-  if (!config.length) return Decoration.none;
+  if (!config.length || !view.visibleRanges.length) return Decoration.none;
 
   const builder = new RangeSetBuilder<Decoration>();
   const seen: Set<number> = new Set();
 
+  const lastRange = view.visibleRanges[view.visibleRanges.length - 1];
+  const tree = ensureSyntaxTree(state, lastRange.to, 50);
+  const { doc } = state;
+
   for (const { from, to } of view.visibleRanges) {
-    for (let pos = from; pos <= to; ) {
-      const line = view.state.doc.lineAt(pos);
+    tree.iterate({
+      from,
+      to,
+      enter({ type, from, to }): false | void {
+        const prop = type.prop(tokenClassNodeProp);
+        if (prop && /formatting-list/.test(prop)) {
+          const { from: lineFrom, text, number } = doc.lineAt(from);
 
-      for (const callout of config) {
-        const match = line.text.match(callout.re);
+          if (seen.has(number)) return;
 
-        if (match) {
-          if (seen.has(line.from)) break;
-          seen.add(line.from);
+          for (const callout of config) {
+            const match = text.match(callout.re);
+            if (match) {
+              seen.add(number);
 
-          const labelPos = line.from + match[1].length;
+              const labelPos = lineFrom + match[1].length;
 
-          // Set the line class and callout color
-          builder.add(line.from, line.from, calloutDecoration(callout.color));
+              // Set the line class and callout color
+              builder.add(
+                lineFrom,
+                lineFrom,
+                calloutDecoration(callout.color)
+              );
 
-          // Decorate the callout marker
-          builder.add(
-            labelPos,
-            labelPos + callout.char.length,
-            Decoration.replace({
-              widget: new CalloutMarker(callout.char, callout.icon),
-            })
-          );
+              // Add the callout background element
+              builder.add(
+                lineFrom,
+                lineFrom,
+                Decoration.widget({ widget: new CalloutBackground(), side: -1 })
+              );
 
-          // Add the callout background element
-          builder.add(
-            line.to,
-            line.to,
-            Decoration.widget({
-              widget: new CalloutBackground(),
-              side: 1,
-            })
-          );
+              // Decorate the callout marker
+              builder.add(
+                labelPos,
+                labelPos + callout.char.length,
+                Decoration.replace({
+                  widget: new CalloutMarker(callout.char, callout.icon),
+                })
+              );
 
-          break;
+              break;
+            }
+          }
         }
-      }
-
-      pos = line.to + 1;
-    }
+      },
+    });
   }
 
   return builder.finish();
@@ -135,7 +151,7 @@ export const calloutExtension = ViewPlugin.fromClass(
     decorations: DecorationSet;
 
     constructor(view: EditorView) {
-      this.decorations = buildCalloutDecos(view);
+      this.decorations = buildCalloutDecos(view, view.state);
     }
 
     update(update: ViewUpdate) {
@@ -146,7 +162,8 @@ export const calloutExtension = ViewPlugin.fromClass(
           tr.effects.some((e) => e.is(setConfig))
         )
       ) {
-        this.decorations = buildCalloutDecos(update.view);
+        console.log('build decos');
+        this.decorations = buildCalloutDecos(update.view, update.state);
       }
     }
   },
