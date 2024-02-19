@@ -21,7 +21,7 @@
   "devDependencies": {
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
-    "@codemirror/language": "https://github.com/lishid/cm-language",
+    "@codemirror/language": "https://github.com/lishid/cm-language#1aadcc247f20ccfda76424a9f853dbb4ee203fdc",
     "@trivago/prettier-plugin-sort-imports": "4.2.0",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.2.0",

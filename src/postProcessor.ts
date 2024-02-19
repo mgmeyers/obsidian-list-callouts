@@ -3,7 +3,7 @@ import { MarkdownPostProcessor, setIcon } from 'obsidian';
 import { CalloutConfig } from './settings';
 
 function getFirstTextNode(li: HTMLElement) {
-  for (const node of li.childNodes) {
+  for (const node of Array.from(li.childNodes)) {
     if (
       node.nodeType === document.ELEMENT_NODE &&
       (node as HTMLElement).tagName === 'P'

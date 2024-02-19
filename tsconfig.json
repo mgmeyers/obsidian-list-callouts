@@ -1,24 +1,19 @@
 {
   "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
+    "importHelpers": true,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "module": "ESNext",
-    "target": "ES6",
-    "allowJs": true,
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
     "isolatedModules": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES5",
-      "ES6",
-      "ES7"
-    ]
+    "jsx": "react",
+    "lib": ["dom", "es6", "scripthost", "es2018"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "target": "es2018"
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }
