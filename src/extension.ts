@@ -158,7 +158,6 @@ export const calloutExtension = ViewPlugin.fromClass(
           tr.effects.some((e) => e.is(setConfig))
         )
       ) {
-        console.log('build decos');
         this.decorations = buildCalloutDecos(update.view, update.state);
       }
     }
