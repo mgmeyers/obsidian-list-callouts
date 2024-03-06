@@ -64,7 +64,7 @@ export const calloutDecoration = (char: string, color: string) =>
     attributes: {
       class: 'lc-list-callout',
       style: `--lc-callout-color: ${color}`,
-      'data-type': `lc-${char}`,
+      'data-callout': char,
     },
   });
 
