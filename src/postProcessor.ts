@@ -81,7 +81,7 @@ export function buildPostProcessor(
 
         if (match) {
           li.addClass('lc-list-callout');
-          li.setAttribute('data-type', "lc-" + callout.char);
+          li.setAttribute('data-callout', callout.char);
           li.style.setProperty('--lc-callout-color', callout.color);
 
           node.replaceWith(
