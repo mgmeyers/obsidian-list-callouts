@@ -59,11 +59,12 @@ export class CalloutMarker extends WidgetType {
   }
 }
 
-export const calloutDecoration = (color: string) =>
+export const calloutDecoration = (char: string, color: string) =>
   Decoration.line({
     attributes: {
       class: 'lc-list-callout',
       style: `--lc-callout-color: ${color}`,
+      'data-type': `lc-${char}`,
     },
   });
 
