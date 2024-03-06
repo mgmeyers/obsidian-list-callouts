@@ -114,7 +114,7 @@ export function buildCalloutDecos(view: EditorView, state: EditorState) {
               const labelPos = lineFrom + match[1].length;
 
               // Set the line class and callout color
-              builder.add(lineFrom, lineFrom, calloutDecoration(callout.color));
+              builder.add(lineFrom, lineFrom, calloutDecoration(callout.char, callout.color));
 
               // Add the callout background element
               builder.add(
