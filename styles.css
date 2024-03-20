@@ -34,7 +34,7 @@ settings:
     id: lc-bg-left
     title: "Callout Padding: Left"
     type: variable-number-slider
-    default: 17
+    default: 21
     format: px
     min: 0
     max: 60
@@ -43,7 +43,7 @@ settings:
     id: lc-bg-left-checkbox-lp
     title: "Callout Padding: Left (live preview checkbox)"
     type: variable-number-slider
-    default: 30
+    default: 28
     format: px
     min: 0
     max: 60
@@ -52,7 +52,7 @@ settings:
     id: lc-bg-left-checkbox
     title: "Callout Padding: Left (source checkbox)"
     type: variable-number-slider
-    default: 50
+    default: 55
     format: px
     min: 0
     max: 60
@@ -99,9 +99,9 @@ settings:
   --lc-bg-top: 0px;
   --lc-bg-right: 0px;
   --lc-bg-bottom: 0px;
-  --lc-bg-left: 17px;
-  --lc-bg-left-checkbox: 50px;
-  --lc-bg-left-checkbox-lp: 30px;
+  --lc-bg-left: 21px;
+  --lc-bg-left-checkbox: 55px;
+  --lc-bg-left-checkbox-lp: 28px;
 
   --lc-bg-top-reading: 0px;
   --lc-bg-right-reading: 0px;
@@ -123,11 +123,11 @@ settings:
   pointer-events: none;
 }
 
-.task-list-label ~ .lc-list-bg {
+.HyperMD-task-line > .lc-list-bg {
   left: calc(-1 * var(--lc-bg-left-checkbox-lp));
 }
 
-.markdown-source-view:not(.is-live-preview) .cm-formatting-task ~ .lc-list-bg {
+.markdown-source-view:not(.is-live-preview) .HyperMD-task-line > .lc-list-bg {
   left: calc(-1 * var(--lc-bg-left-checkbox));
 }
 
