@@ -20,7 +20,8 @@ export interface Callout {
   custom?: boolean;
 }
 
-export interface CalloutConfig extends Callout {
+export interface CalloutConfig {
+  callouts: Record<string, Callout>;
   re: RegExp;
 }
 

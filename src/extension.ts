@@ -17,7 +17,7 @@ import { setIcon } from 'obsidian';
 
 import { CalloutConfig } from './settings';
 
-export const setConfig = StateEffect.define<CalloutConfig[]>();
+export const setConfig = StateEffect.define<CalloutConfig>();
 
 export class CalloutBackground extends WidgetType {
   toDOM() {
@@ -27,6 +27,9 @@ export class CalloutBackground extends WidgetType {
         'aria-hidden': 'true',
       },
     });
+  }
+  eq(): boolean {
+    return true;
   }
 }
 
@@ -57,6 +60,10 @@ export class CalloutMarker extends WidgetType {
       }
     );
   }
+
+  eq(widget: CalloutMarker): boolean {
+    return widget.char === this.char && widget.icon === this.icon;
+  }
 }
 
 export const calloutDecoration = (char: string, color: string) =>
@@ -68,9 +75,9 @@ export const calloutDecoration = (char: string, color: string) =>
     },
   });
 
-export const calloutsConfigField = StateField.define<CalloutConfig[]>({
+export const calloutsConfigField = StateField.define<CalloutConfig>({
   create() {
-    return [];
+    return { callouts: {}, re: null };
   },
   update(state, tr) {
     for (const e of tr.effects) {
@@ -85,55 +92,51 @@ export const calloutsConfigField = StateField.define<CalloutConfig[]>({
 
 export function buildCalloutDecos(view: EditorView, state: EditorState) {
   const config = state.field(calloutsConfigField);
-
-  if (!config.length || !view.visibleRanges.length) return Decoration.none;
+  if (!config?.re || !view.visibleRanges.length) return Decoration.none;
 
   const builder = new RangeSetBuilder<Decoration>();
-  const seen: Set<number> = new Set();
-
   const lastRange = view.visibleRanges[view.visibleRanges.length - 1];
   const tree = ensureSyntaxTree(state, lastRange.to, 50);
   const { doc } = state;
+
+  let lastEnd = -1;
 
   for (const { from, to } of view.visibleRanges) {
     tree.iterate({
       from,
       to,
       enter({ type, from, to }): false | void {
+        if (from <= lastEnd) return;
+
         const prop = type.prop(tokenClassNodeProp);
         if (prop && /formatting-list/.test(prop)) {
-          const { from: lineFrom, text, number } = doc.lineAt(from);
+          const { from: lineFrom, to, text } = doc.lineAt(from);
+          const match = text.match(config.re);
+          const callout = match ? config.callouts[match[2]] : null;
 
-          if (seen.has(number)) return;
+          lastEnd = to;
 
-          for (const callout of config) {
-            const match = text.match(callout.re);
-            if (match) {
-              seen.add(number);
+          if (callout) {
+            const labelPos = lineFrom + match[1].length;
 
-              const labelPos = lineFrom + match[1].length;
+            // Set the line class and callout color
+            builder.add(lineFrom, lineFrom, calloutDecoration(callout.char, callout.color));
 
-              // Set the line class and callout color
-              builder.add(lineFrom, lineFrom, calloutDecoration(callout.char, callout.color));
+            // Add the callout background element
+            builder.add(
+              lineFrom,
+              lineFrom,
+              Decoration.widget({ widget: new CalloutBackground(), side: -1 })
+            );
 
-              // Add the callout background element
-              builder.add(
-                lineFrom,
-                lineFrom,
-                Decoration.widget({ widget: new CalloutBackground(), side: -1 })
-              );
-
-              // Decorate the callout marker
-              builder.add(
-                labelPos,
-                labelPos + callout.char.length,
-                Decoration.replace({
-                  widget: new CalloutMarker(callout.char, callout.icon),
-                })
-              );
-
-              break;
-            }
+            // Decorate the callout marker
+            builder.add(
+              labelPos,
+              labelPos + callout.char.length,
+              Decoration.replace({
+                widget: new CalloutMarker(callout.char, callout.icon),
+              })
+            );
           }
         }
       },

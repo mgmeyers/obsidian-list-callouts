@@ -72,7 +72,7 @@ function wrapLiContent(li: HTMLElement) {
 }
 
 export function buildPostProcessor(
-  getConfig: () => CalloutConfig[]
+  getConfig: () => CalloutConfig
 ): MarkdownPostProcessor {
   return async (el, ctx: any) => {
     const config = getConfig();
@@ -83,44 +83,39 @@ export function buildPostProcessor(
 
     el.findAll('li').forEach((li) => {
       const node = getFirstTextNode(li);
-
       if (!node) return;
 
       const text = node.textContent;
-
       if (!text) return;
 
-      for (const callout of config) {
-        const match = text.match(callout.re);
+      const match = text.match(config.re);
+      const callout = match ? config.callouts[match[1]] : null;
 
-        if (match) {
-          li.addClass('lc-list-callout');
-          li.setAttribute('data-callout', callout.char);
-          li.style.setProperty('--lc-callout-color', callout.color);
+      if (callout) {
+        li.addClass('lc-list-callout');
+        li.setAttribute('data-callout', callout.char);
+        li.style.setProperty('--lc-callout-color', callout.color);
 
-          node.replaceWith(
-            createFragment((f) => {
-              f.append(
-                createSpan(
-                  {
-                    cls: 'lc-list-marker',
-                    text: text.slice(0, callout.char.length),
-                  },
-                  (span) => {
-                    if (callout.icon) {
-                      setIcon(span, callout.icon);
-                    }
+        node.replaceWith(
+          createFragment((f) => {
+            f.append(
+              createSpan(
+                {
+                  cls: 'lc-list-marker',
+                  text: text.slice(0, callout.char.length),
+                },
+                (span) => {
+                  if (callout.icon) {
+                    setIcon(span, callout.icon);
                   }
-                )
-              );
-              f.append(text.slice(callout.char.length));
-            })
-          );
+                }
+              )
+            );
+            f.append(text.slice(callout.char.length));
+          })
+        );
 
-          wrapLiContent(li);
-
-          break;
-        }
+        wrapLiContent(li);
       }
     });
   };

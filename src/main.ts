@@ -45,7 +45,7 @@ const DEFAULT_SETTINGS: ListCalloutsSettings = [
 export default class ListCalloutsPlugin extends Plugin {
   settings: ListCalloutsSettings;
   emitter: Events;
-  postProcessorConfig: CalloutConfig[];
+  postProcessorConfig: CalloutConfig;
 
   async onload() {
     await this.loadSettings();
@@ -84,26 +84,32 @@ export default class ListCalloutsPlugin extends Plugin {
     });
   }
 
-  buildEditorConfig(): CalloutConfig[] {
-    return this.settings.map((callout) => {
-      return {
-        ...callout,
-        re: new RegExp(
-          `(^\\s*[-*+](?: \\[.\\])? |^\\s*\\d+[\\.\\)](?: \\[.\\])? )${escapeStringRegexp(
-            callout.char
-          )} `
-        ),
-      };
-    });
+  buildEditorConfig(): CalloutConfig {
+    return {
+      callouts: this.settings.reduce<Record<string, Callout>>((record, curr) => {
+        record[curr.char] = curr;
+        return record
+      }, {}),
+      re: new RegExp(
+        `(^\\s*[-*+](?: \\[.\\])? |^\\s*\\d+[\\.\\)](?: \\[.\\])? )(${
+          this.settings.map(callout => escapeStringRegexp(callout.char)).join('|')
+        }) `
+      ),
+    }
   }
 
   buildPostProcessorConfig() {
-    this.postProcessorConfig = this.settings.map((callout) => {
-      return {
-        ...callout,
-        re: new RegExp(`^${escapeStringRegexp(callout.char)} `),
-      };
-    });
+    this.postProcessorConfig = {
+      callouts: this.settings.reduce<Record<string, Callout>>((record, curr) => {
+        record[curr.char] = curr;
+        return record
+      }, {}),
+      re: new RegExp(
+        `(${
+          this.settings.map(callout => escapeStringRegexp(callout.char)).join('|')
+        }) `
+      ),
+    }
   }
 
   async loadSettings() {
