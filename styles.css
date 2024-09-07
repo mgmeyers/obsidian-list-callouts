@@ -4,6 +4,22 @@ name: List Callouts
 id: list-callouts
 settings:
   -
+    id: lc-bg-opacity-light
+    title: "Background Intensity (light)"
+    type: variable-number-slider
+    default: 0.1
+    min: 0
+    max: 1
+    step: 0.01
+  -
+    id: lc-bg-opacity-dark
+    title: "Background Intensity (dark)"
+    type: variable-number-slider
+    default: 0.15
+    min: 0
+    max: 1
+    step: 0.01
+  -
     id: lc-bg-top
     title: "Callout Padding: Top"
     type: variable-number-slider
@@ -107,6 +123,9 @@ settings:
   --lc-bg-right-reading: 0px;
   --lc-bg-bottom-reading: 0px;
   --lc-bg-left-reading: 27px;
+
+  --lc-bg-opacity-light: 0.1;
+  --lc-bg-opacity-dark: 0.15;
 }
 
 .lc-list-bg {
@@ -132,12 +151,16 @@ settings:
 }
 
 .lc-list-bg::after {
-  background-color: rgba(var(--lc-callout-color), 0.1);
+  background-color: rgba(var(--lc-callout-color), var(--lc-bg-opacity-light));
   content: " ";
   display: block;
   width: 100%;
   height: 100%;
   border-radius: 4px;
+}
+
+.theme-dark .lc-list-bg::after {
+  background-color: rgba(var(--lc-callout-color), var(--lc-bg-opacity-dark));
 }
 
 .lc-list-marker {
@@ -163,7 +186,7 @@ settings:
 .lc-li-wrapper::after {
   z-index: -1;
   position: absolute;
-  background-color: rgba(var(--lc-callout-color), 0.1);
+  background-color: rgba(var(--lc-callout-color), var(--lc-bg-opacity-light));
   top: calc(-1 * var(--lc-bg-top-reading) + 1px);
   right: calc(-1 * var(--lc-bg-right-reading) + 1px);
   bottom: calc(-1 * var(--lc-bg-bottom-reading) + 1px);
@@ -171,6 +194,10 @@ settings:
   content: "";
   display: block;
   border-radius: 4px;
+}
+
+.theme-dark .lc-li-wrapper::after {
+  background-color: rgba(var(--lc-callout-color), var(--lc-bg-opacity-dark));
 }
 
 /* Settings */
