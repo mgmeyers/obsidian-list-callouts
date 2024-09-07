@@ -55,7 +55,8 @@ export default class ListCalloutsPlugin extends Plugin {
     this.emitter = new Events();
 
     this.registerMarkdownPostProcessor(
-      buildPostProcessor(() => this.postProcessorConfig)
+      buildPostProcessor(() => this.postProcessorConfig),
+      10000
     );
 
     this.registerEditorExtension([

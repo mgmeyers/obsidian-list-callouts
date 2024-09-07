@@ -4,6 +4,16 @@ import { CalloutConfig } from './settings';
 
 function getFirstTextNode(li: HTMLElement) {
   for (const node of Array.from(li.childNodes)) {
+    if (node.nodeType === document.ELEMENT_NODE && (node as HTMLElement).classList.contains('tasks-list-text')) {
+      const descriptionNode = (node as HTMLElement).firstElementChild
+      if (descriptionNode?.classList.contains('task-description')) {
+        const textNode = descriptionNode.firstElementChild?.firstChild;
+        if (textNode.nodeType === document.TEXT_NODE) {
+          return textNode;
+        }
+      }
+    }
+
     if (
       node.nodeType === document.ELEMENT_NODE &&
       (node as HTMLElement).tagName === 'P'
@@ -64,8 +74,12 @@ function wrapLiContent(li: HTMLElement) {
 export function buildPostProcessor(
   getConfig: () => CalloutConfig[]
 ): MarkdownPostProcessor {
-  return (el) => {
+  return async (el, ctx: any) => {
     const config = getConfig();
+
+    if (ctx.promises?.length) {
+      await Promise.all(ctx.promises);
+    }
 
     el.findAll('li').forEach((li) => {
       const node = getFirstTextNode(li);
