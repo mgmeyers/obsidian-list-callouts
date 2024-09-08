@@ -105,7 +105,7 @@ export default class ListCalloutsPlugin extends Plugin {
         return record
       }, {}),
       re: new RegExp(
-        `(${
+        `^(${
           this.settings.map(callout => escapeStringRegexp(callout.char)).join('|')
         }) `
       ),
