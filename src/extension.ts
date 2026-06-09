@@ -97,6 +97,7 @@ export function buildCalloutDecos(view: EditorView, state: EditorState) {
   const builder = new RangeSetBuilder<Decoration>();
   const lastRange = view.visibleRanges[view.visibleRanges.length - 1];
   const tree = ensureSyntaxTree(state, lastRange.to, 50);
+  if (!tree) return Decoration.none;
   const { doc } = state;
 
   let lastEnd = -1;
