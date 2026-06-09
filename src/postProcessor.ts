@@ -8,7 +8,7 @@ function getFirstTextNode(li: HTMLElement) {
       const descriptionNode = (node as HTMLElement).firstElementChild
       if (descriptionNode?.classList.contains('task-description')) {
         const textNode = descriptionNode.firstElementChild?.firstChild;
-        if (textNode.nodeType === document.TEXT_NODE) {
+        if (textNode && textNode.nodeType === document.TEXT_NODE) {
           return textNode;
         }
       }
