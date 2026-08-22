@@ -164,6 +164,9 @@ settings:
 }
 
 .lc-list-marker {
+  /* Keep the marker an atomic inline box: an icon rendered as a block-level
+     SVG would otherwise split it and push the list text onto its own line. */
+  display: inline-block;
   font-family: var(--font-monospace);
   font-weight: bold;
   color: rgb(var(--lc-callout-color));
@@ -205,6 +208,16 @@ settings:
 .lc-setting {
   padding: 15px 0;
   border-top: 1px solid var(--background-modifier-border);
+}
+
+/*
+ * The settings preview reuses the editor's class names so callouts are styled
+ * identically, but it isn't a real editor. Undo the source view's full-height
+ * flex layout so the mock line sizes to its own content.
+ */
+.lc-setting .markdown-source-view.mod-cm6 {
+  display: block;
+  height: auto;
 }
 
 .lc-setting:last-child {
